@@ -143,3 +143,51 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ARCH
 vim /etc/default/grub
 # 去註釋GRUB_DISABLE_OS_PROBER=false以引導windows
 ```
+
+# 後續工序
+
+1. 配置root的編輯器
+```sh
+vim ~/.bash_profile
+# export EDITOR='vim'
+```
+2. 添加非root用戶
+```sh
+useradd -m -G wheel -s /bin/zsh [username]
+# -m 同時創建home -G 指定用戶組 -s 指定用戶使用的shell
+passwd [username]
+EDITOR=vim visudo # 上一條尚未生效
+打開註釋#%wheel ALL=(ALL) ALL 
+```
+3. 安裝桌面環境
+```sh
+pacman -S plasma-meta konsole dolphin plasma-wayland-session # plasma-meta 元软件包以及wayland支持、konsole 终端模拟器和 dolphin 文件管理器
+```
+4. 啓用sddm TODO：移除這個步驟，直接登錄到plasma
+```sh
+systemctl enable sddm
+```
+5. 开启 32 位支持库与 Arch Linux 中文社区仓库（archlinuxcn）
+```sh
+vim /etc/pacman.conf
+# 打開multilib，添加archlinuxcn
+```
+6. 裝輸入法 TODO：確認哪一步可以加入
+```sh
+sudo pacman -S fcitx5-rime fcitx5-qt fcitx5-configtool
+```
+7. Wayland支持：`/etc/environment`
+- Firefox
+```sh
+MOZ_ENABLE_WAYLAND=1
+```
+- 輸入法
+```sh
+INPUT_METHOD=fcitx5
+GTK_IM_MODULE=fcitx5
+QT_IM_MODULE=fcitx5
+XMODIFIERS=\@im=fcitx5
+SDL_IM_MODULE=fcitx5
+```
+- Chromium  
+在`chrome://flags`裡搜索wayland，打開相關選項

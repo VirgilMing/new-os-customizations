@@ -167,7 +167,14 @@ pacman -S plasma-meta konsole dolphin plasma-wayland-session # plasma-meta 元�
 ```sh
 systemctl enable sddm
 ```
-5. 开启 32 位支持库与 Arch Linux 中文社区仓库（archlinuxcn）
+5. 到桌面環境裡關閉iwd，開啓NetworkManager
+```sh
+sudo systemctl disable iwd # 确保 iwd 开机处于关闭状态，因为其无线连接会与 NetworkManager 冲突
+sudo systemctl stop iwd # 立即关闭 iwd
+sudo systemctl enable --now NetworkManager # 确保先启动 NetworkManager，并进行网络连接。若 iwd 已经与 NetworkManager 冲突，则执行完上一步重启一下电脑即可
+ping www.bilibili.com # 测试网络连通性
+```
+7. 开启 32 位支持库与 Arch Linux 中文社区仓库（archlinuxcn）
 ```sh
 vim /etc/pacman.conf
 # 打開multilib，添加archlinuxcn
